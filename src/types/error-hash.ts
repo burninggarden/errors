@@ -7,11 +7,9 @@ interface SerializableObject {
 	[key: string]: SerializableValue;
 }
 
-interface ErrorHash {
+export default interface ErrorHash {
 	type          : ErrorType;
 	message       : string;
 	statusCode    : StatusCode;
 	[key: string] : SerializableValue | SerializableObject | SerializableValue[];
 }
-
-export default ErrorHash;
