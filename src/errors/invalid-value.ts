@@ -1,5 +1,6 @@
 import ErrorType    from 'enums/error-type';
 import BaseError    from 'errors/base';
+import ErrorHash    from 'types/error-hash'
 import {StatusCode} from '@burninggarden/http';
 
 class InvalidValueError extends BaseError {
@@ -24,8 +25,16 @@ class InvalidValueError extends BaseError {
 	public getMessage(): string {
 		return this.trimMessage(`
 			Received unexpected value: ${this.getActualValue()}
-			(expected one of ${this.getExpectedValues()})
+			(expected one of ${this.serializeExpectedValues()})
 		`);
+	}
+
+	public toHash(): ErrorHash {
+		return {
+			...super.toHash(),
+			actualValue: this.getActualValue(),
+			expectedValues: this.getExpectedValues()
+		};
 	}
 
 	protected getLabel(): string {
@@ -38,6 +47,10 @@ class InvalidValueError extends BaseError {
 
 	private getExpectedValues(): any[] {
 		return this.expectedValues;
+	}
+
+	private serializeExpectedValues(): string {
+		return this.getExpectedValues().join(', ');
 	}
 }
 
